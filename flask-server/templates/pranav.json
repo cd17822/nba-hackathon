@@ -1,50 +1,15 @@
-{"result":
-  ['JR Smith',
- 'Kyrie Irving',
- 'JR Smith',
- 'Kyrie Irving',
- 'JR Smith',
- 'JR Smith',
- 'Tristan Thompson',
- 'Kyrie Irving',
- 'Kyrie Irving',
- 'Matthew Dellavedova',
- 'Richard Jefferson',
- 0,
- 0,
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'LeBron James',
- 'JR Smith',
- 'Kyrie Irving',
- 'Kyrie Irving',
- 'LeBron James',
- 'Kyrie Irving',
- 'Kyrie Irving',
- 'Monte Mathis',
- 0,
- 0,
- 0,
- 0,
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Iman Shumpert',
- 'Tristan Thompson',
- 'JR Smith',
- 'JR Smith',
- 'Kyrie Irving',
- 0,
- 0]
-}
+svg.append("text")
+.attr("class", "x label")
+.attr("text-anchor", "end")
+.attr("x", width/2 + padding/2)
+.attr("y", height - 6)
+.text("Minute of game");
+
+svg.append("text")
+.attr("class", "y label")
+.attr("text-anchor", "end")
+.attr("y", 5)
+.attr("x", -height/2 - padding/2)
+.attr("dy", ".65em")
+.attr("transform", "rotate(-90)")
+.text("FG%");

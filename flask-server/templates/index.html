@@ -7,7 +7,6 @@
     stroke: black;
     shape-rendering: crispEdges;
 }
-
 .axis text {
     font-family: sans-serif;
     font-size: 8px;
@@ -15,17 +14,14 @@
 svg {
   border: 1px solid black;
 }
-
 .overlay {
   fill: none;
   pointer-events: all;
 }
-
 .focus circle {
   fill: none;
   stroke: steelblue;
 }
-
 .navbar {
   height: 65px;
   background-color: #0253A4;
@@ -33,33 +29,27 @@ svg {
   margin-top: -30px;
   margin-right: -30px;
 }
-
 .navbar2 {
   height: 20px;
   background-color: #0253A4;
   margin-left: -30px;
   margin-right: -30px;
 }
-
-
 img {
   height: 55px;
   margin-top: 18px;
   margin-left: 10px;
 }
-
 body {
   font-family: "Avenir Next";
   margin: 25px;
   background-color: #F2F2F2;
 }
-
 .title {
   color: white;
   font-size: 70px;
   margin-bottom: 10px;
 }
-
 .select_join {
   width: 140px;
   height: 28px;
@@ -71,9 +61,7 @@ body {
   -webkit-box-shadow: inset 0px 0px 10px 1px #FEFEFE;
   box-shadow: inset 0px 0px 10px 1px #FEFEFE;
 }
-
 .select_join select {
-
   background: transparent;
   width: 140px;
   font-size:7pt;
@@ -82,12 +70,10 @@ body {
   border-radius: 0;
   height: 28px;
   -webkit-appearance: none;
-
 }
 .select_join select:focus {
   outline: none;
 }
-
 </style>
 
 </head>
@@ -135,7 +121,6 @@ body {
 <script>
 	// 48 value array from pranav.
 	// 60x48 1D array from charlie.
-
 	var playerColor = {
 		"Kyrie Irving":"#ffffcc",
 		"JR Smith":"#ffbf80",
@@ -154,29 +139,21 @@ body {
 		"Sasha Kaun":"#00cc00",
 		"0": "#f2f2f2"
 	}
-
-
 	var height = 500;
 	var width = 800;
 	var padding = 40;
-
-
 	var e = document.getElementById("offensiveplayer").value;
 	console.log('http://localhost:5000/fgpct/' + e)
 	console.log('http://localhost:5000/defense/' + e)
 	getBuckets()
 	var resArr;
 	var defenderPerMin;
-
 	function getVals() {
 		console.log(resArr);
 	}
-
 	function getBuckets() {
 		e = document.getElementById("offensiveplayer").value;
-
 		d3.json('http://localhost:5000/defense/'+e, function(error,data){
-
 			var resultArr = []
 			console.log(data)
 			var res = data["defense"]
@@ -191,11 +168,8 @@ body {
 			resArr = resultArr
 			defenderPerMin = res
 			return [resultArr,res]
-
 		})
-
 	}
-
 	populateGraph()
 	function populateGraph() {
 		e = document.getElementById("offensiveplayer").value;
@@ -204,18 +178,13 @@ body {
 			var element = d3.select("#svg");
 			d3.selectAll("svg").remove();
 			playerData = data["fgpct"];
-
-
-
 			//Sets up the logic for displaying the graphs and plotting points on the graph
 			var svg = d3.select("#graph").append("svg")
 			.attr("height", height)
 			.attr("width", width);
-
 			var xScale = d3.scale.linear()
 			.domain([0, 48])
 			.range([padding, width-padding]);
-
 			var xAxis = d3.svg.axis()
 			.orient("bottom")
 			.tickFormat(d3.format("d"))
@@ -224,27 +193,37 @@ body {
 			.tickFormat(function (d){
 				return d;
 			});
-
 			svg.append("g")
 			.attr("class", "axis")
 			.attr("transform", "translate(0," + (height-padding) + ")")
 			.call(xAxis);
-
 			var yScale = d3.scale.linear()
 			.domain([0,100])
 			.range([height-padding,padding]);
-
 			var yAxis = d3.svg.axis()
 			.orient("left")
 			.tickFormat(d3.format("d"))
 			.ticks(20)
 			.scale(yScale)
-
-
 			svg.append("g")
 			.attr("class", "axis")
 			.attr("transform", "translate(" + padding + ",0)")
 			.call(yAxis)
+			svg.append("text")
+			.attr("class", "x label")
+			.attr("text-anchor", "end")
+			.attr("x", width/2 + padding/2)
+			.attr("y", height - 6)
+			.text("Minute of game");
+
+			svg.append("text")
+			.attr("class", "y label")
+			.attr("text-anchor", "end")
+			.attr("y", 5)
+			.attr("x", -height/2 - padding/2)
+			.attr("dy", ".65em")
+			.attr("transform", "rotate(-90)")
+			.text("FG%");
 
 			var x01 = 0
 			var y01 = 0
@@ -262,7 +241,6 @@ body {
 				.style("stroke", strokeColor)
 				.style("opacity",1.0)
 				.style("fill", "none")
-
 				svg.append("rect")
 				.attr("x",xScale(x01))
 				.attr("y",xScale(0))
@@ -270,40 +248,31 @@ body {
 				.attr("height",yScale(10))
 				.style("fill",strokeColor)
 				.style("opacity",1.0)
-
 				x01 = min
 				y01 = 0
 			}
-
 			//Plotting data
-
 			//parsing the data from the tsv file, and plots x as years and y as the total number of deaths.
-
 			var line = d3.svg.line()
 				.x(function(d,i) {
 					//should divide i by 60 to have the plot point
 					return xScale(i/60); })
 				.y(function(d,i) {
 					return yScale(d*100); });
-
 			var linePath = svg.append("path")
 				.datum(playerData)
 				.style("fill","none")
 				.style("stroke", "#0253A4")
 				.style("stroke-width",3)
 				.attr("d", line);
-
 			var focus = svg.append("g")
 			.attr("class", "focus")
 			.style("display", "none");
-
 			focus.append("circle")
 					.attr("r", 4.5);
-
 			focus.append("text")
 					.attr("x", 9)
 					.attr("dy", ".35em");
-
 	svg.append("rect")
 			.attr("class", "overlay")
 			.attr("width", width)
@@ -311,7 +280,6 @@ body {
 			.on("mouseover", function() { focus.style("display", null); })
 			.on("mouseout", function() { focus.style("display", "none"); })
 			.on("mousemove", mousemove);
-
 	function mousemove() {
 		var x0 = xScale.invert(d3.mouse(this)[0]);
 		var yArrayIndex = Math.floor(x0*60);
@@ -323,7 +291,6 @@ body {
 		if(defender == 0 || defender == "0"){
 			defender = "Benched"
 		}
-
 		focus.attr("transform", "translate(" + xScale(x0) + "," + yScale(y0*100) + ")");
 		focus.select("text").text(y0 + "\n" + defender);
 		focus.insert("rect","text")
@@ -335,7 +302,6 @@ body {
 	}
 	})
 }
-
 function handleStatChange() {
 	e = document.getElementById("offensiveplayer").value;
 	d3.json('http://localhost:5000/pts/' + e.toString(), function(error,data){
@@ -343,16 +309,13 @@ function handleStatChange() {
 		var element = d3.select("#svg");
 		d3.selectAll("svg").remove();
 		playerData = data["pts"];
-
 		//Sets up the logic for displaying the graphs and plotting points on the graph
 		var svg = d3.select("#graph").append("svg")
 		.attr("height", height)
 		.attr("width", width);
-
 		var xScale = d3.scale.linear()
 		.domain([0, 48])
 		.range([padding, width-padding]);
-
 		var xAxis = d3.svg.axis()
 		.orient("bottom")
 		.tickFormat(d3.format("d"))
@@ -361,27 +324,37 @@ function handleStatChange() {
 		.tickFormat(function (d){
 			return d;
 		});
-
 		svg.append("g")
 		.attr("class", "axis")
 		.attr("transform", "translate(0," + (height-padding) + ")")
 		.call(xAxis);
-
 		var yScale = d3.scale.linear()
 		.domain([0,40])
 		.range([height-padding,padding]);
-
 		var yAxis = d3.svg.axis()
 		.orient("left")
 		.tickFormat(d3.format("d"))
 		.ticks(20)
 		.scale(yScale)
-
-
 		svg.append("g")
 		.attr("class", "axis")
 		.attr("transform", "translate(" + padding + ",0)")
 		.call(yAxis)
+		svg.append("text")
+		.attr("class", "x label")
+		.attr("text-anchor", "end")
+		.attr("x", width/2 + padding/2)
+		.attr("y", height - 6)
+		.text("Minute of game");
+
+		svg.append("text")
+		.attr("class", "y label")
+		.attr("text-anchor", "end")
+		.attr("y", 5)
+		.attr("x", -height/2 - padding/2)
+		.attr("dy", ".65em")
+		.attr("transform", "rotate(-90)")
+		.text("Points");
 
 		var x01 = 0
 		var y01 = 0
@@ -399,7 +372,6 @@ function handleStatChange() {
 			.style("stroke", strokeColor)
 			.style("opacity",1.0)
 			.style("fill", "none")
-
 			svg.append("rect")
 			.attr("x",xScale(x01))
 			.attr("y",xScale(0))
@@ -407,43 +379,31 @@ function handleStatChange() {
 			.attr("height",yScale(4))
 			.style("fill",strokeColor)
 			.style("opacity",1.0)
-
 			x01 = min
 			y01 = 0
 		}
-
-
-
 		//Plotting data
-
 		//parsing the data from the tsv file, and plots x as years and y as the total number of deaths.
-
 		var line = d3.svg.line()
 			.x(function(d,i) {
 				//should divide i by 60 to have the plot point
 				return xScale(i/60); })
 			.y(function(d,i) {
 				return yScale(d); });
-
 		var linePath = svg.append("path")
 			.datum(playerData)
 			.style("fill","none")
 			.style("stroke", "#0253A4")
 			.style("stroke-width",3)
 			.attr("d", line);
-
-
 		var focus = svg.append("g")
 		.attr("class", "focus")
 		.style("display", "none");
-
 		focus.append("circle")
 				.attr("r", 4.5);
-
 		focus.append("text")
 				.attr("x", 9)
 				.attr("dy", ".35em");
-
 svg.append("rect")
 		.attr("class", "overlay")
 		.attr("width", width)
@@ -451,7 +411,6 @@ svg.append("rect")
 		.on("mouseover", function() { focus.style("display", null); })
 		.on("mouseout", function() { focus.style("display", "none"); })
 		.on("mousemove", mousemove);
-
 function mousemove() {
 	var x0 = xScale.invert(d3.mouse(this)[0]);
 	var yArrayIndex = Math.floor(x0*60);
@@ -463,7 +422,6 @@ function mousemove() {
 	if(defender == 0 || defender == "0"){
 		defender = "Benched"
 	}
-
 	focus.attr("transform", "translate(" + xScale(x0) + "," + yScale(y0) + ")");
 	focus.select("text").text(y0 + "\n" + defender);
 	focus.insert("rect","text")
@@ -472,12 +430,8 @@ function mousemove() {
 	.attr("height", 20)
 	.style("fill", "#f2f2f2");
 }
-
-
 	})
-
 }
-
 function middleStat() {
 	var temp = document.getElementById("offensiveStat").value;
 	if(temp == "per"){
@@ -487,7 +441,6 @@ function middleStat() {
 		populateGraph()
 	}
 }
-
 </script>
 </body>
 </html>
