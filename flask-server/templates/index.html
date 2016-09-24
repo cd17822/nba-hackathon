@@ -428,7 +428,7 @@ function handleStatChange() {
 		var linePath = svg.append("path")
 			.datum(playerData)
 			.style("fill","none")
-			.style("stroke", "#f2f2f2")
+			.style("stroke", "#0253A4")
 			.style("stroke-width",3)
 			.attr("d", line);
 
@@ -470,8 +470,7 @@ function mousemove() {
 	.attr("width", defender.length * 15)
 	.attr("transform", "translate(0,-10)")
 	.attr("height", 20)
-	.style("color", "white")
-	.style("fill", "#0253A4");
+	.style("fill", "#f2f2f2");
 }
 
 
