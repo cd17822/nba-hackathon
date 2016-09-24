@@ -34,7 +34,7 @@ def main():
 
     updateDataToIndex(2880)
 
-    print DATA
+    print '{"lebron_james":', DATA, "}"
     #print len(DATA)
 
 def parseGameLine(line):
@@ -43,7 +43,7 @@ def parseGameLine(line):
     if not GAME_ID in line:
         IN_GAME = False
         GAME_IS_OVER = True
-    elif PLAYER in line:
+    elif PLAYER in line and not "Assist: "+PLAYER in line and not "Block: "+PLAYER in line:
         period = int(line.split()[4]) - 1
         seconds_elapsed_in_period = SECONDS_IN_PERIOD - int(line.split()[9]) / 10
 
