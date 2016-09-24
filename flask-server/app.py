@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import render_template
 app = Flask(__name__)
 
 #misc
@@ -30,6 +31,10 @@ def pts(last_name):
     initPtsGlobals()
 
     return getPtsData()
+
+@app.route('/home/')
+def home():
+    return render_template('index.html')
 
 def initPtsGlobals():
     global DATA_INDEX, GAME_IS_OVER, IN_GAME, DATA, LAST_DATAPOINT, PTS
