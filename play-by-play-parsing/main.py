@@ -1,9 +1,13 @@
+#################
+#DEPRECATED - SEE flask-server/app.py
+#################
+
 SECONDS_IN_PERIOD = 12 * 60
 
 GAME_IS_OVER = False
 IN_GAME = False
 GAME_ID = '41500405'
-PLAYER = 'James'
+PLAYER = 'Curry'
 MADE_SHOT = 'Made Shot'
 MISSED_SHOT = 'Missed Shot'
 DATA = []
@@ -34,7 +38,7 @@ def main():
 
     updateDataToIndex(2880)
 
-    print '{"lebron_james":', DATA, "}"
+    print '{"andrew_bogut":', DATA, "},"
     #print len(DATA)
 
 def parseGameLine(line):
