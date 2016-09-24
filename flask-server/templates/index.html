@@ -1,27 +1,22 @@
 <html>
 <head>
-	<style>
-	.axis path,
-	.axis line {
-	    fill: none;
-	    stroke: black;
-	    shape-rendering: crispEdges;
-	}
+<style>
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
+}
 
-	.axis text {
-	    font-family: sans-serif;
-	    font-size: 8px;
-	}
-	svg {
-		border: 1px solid black;
-	}
+.axis text {
+    font-family: sans-serif;
+    font-size: 8px;
+}
+svg {
+  border: 1px solid black;
+}
 
-	h1,h2 {
-		color:blue;
-		margin-left: 20px;
-	}
-
-	.overlay {
+.overlay {
   fill: none;
   pointer-events: all;
 }
@@ -31,47 +26,110 @@
   stroke: steelblue;
 }
 
-	</style>
+.navbar {
+  height: 65px;
+  background-color: #0253A4;
+  margin-left: -30px;
+  margin-top: -30px;
+  margin-right: -30px;
+}
+
+.navbar2 {
+  height: 20px;
+  background-color: #0253A4;
+  margin-left: -30px;
+  margin-right: -30px;
+}
+
+
+img {
+  height: 55px;
+  margin-top: 18px;
+  margin-left: 10px;
+}
+
+body {
+  font-family: "Avenir Next";
+  margin: 25px;
+  background-color: #F2F2F2;
+}
+
+.title {
+  color: white;
+  font-size: 70px;
+  margin-bottom: 10px;
+}
+
+.select_join {
+  width: 140px;
+  height: 28px;
+  overflow: hidden;
+  margin-right: 7px;
+  border: #FEFEFE 1px solid;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -webkit-box-shadow: inset 0px 0px 10px 1px #FEFEFE;
+  box-shadow: inset 0px 0px 10px 1px #FEFEFE;
+}
+
+.select_join select {
+
+  background: transparent;
+  width: 140px;
+  font-size:7pt;
+  color:grey;
+  border: 0;
+  border-radius: 0;
+  height: 28px;
+  -webkit-appearance: none;
+
+}
+.select_join select:focus {
+  outline: none;
+}
+
+</style>
 
 </head>
 
 <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 
 <body>
-
-<div>
-<p>
-	<h1>Games 5 NBA Finals</h1>
-	<h2>Evaluation of Cavalier's Defense on the Warriors </h2>
-	<text>Pick GSW player to visualize their performance over the game & the impact of the defense.</text>
-	<br></br>
-	<select id="offensiveplayer" onchange="middleStat()">
-	  <option value="Curry">Stephen Curry</option>
-	  <option value="Thompson">Klay Thompson</option>
-	  <option value="Iguodala">Andre Iguodala</option>
-	  <option value="Gree">Draymond Green</option>
-		<option value="Bogut">Andrew Bogut</option>
-	  <option value="Livingston">Shaun Livingston</option>
-	  <option value="Barbosa">Leandro Barbosa</option>
-	  <option value="Barnes">Harrison Barnes</option>
-		<option value="Clark">Ian Clark</option>
-	  <option value="Ezeli">Festus Ezeli</option>
-	  <option value="Rush">Brandon Rush</option>
-	  <option value="Varejao">Anderson Varejao</option>
-		<option value="jason_thompson">Jason Thompson</option>
-		<option value="Speight">Marreese Speights</option>
-		<option value="Loony">Kevon Looney</option>
-	</select>
-</p>
+<div class="navbar">
+<img src="http://www.logodesignlove.com/images/classic/nba-logo.jpg">
+  <a class="title">NBA Finals - Game 5</a>
+</div>
+<div class="navbar2">
 </div>
 
 <div>
-	<select id="offensiveStat" onchange="middleStat()">
-		<option value="fg">FG %</option>
-		<option value="per">Points</option>
-	</select>
+  <h2>Warriors Performance vs. Cavaliers Defenders</h2>
+  <text>Select GSW player to visualize their performance and the impact of their defender:</text><br><br>
+  <select class="select_join" id="offensiveplayer" onchange="middleStat()">
+    <option value="Curry">Stephen Curry</option>
+    <option value="Thompson">Klay Thompson</option>
+    <option value="Iguodala">Andre Iguodala</option>
+    <option value="Green">Draymond Green</option>
+    <option value="Bogut">Andrew Bogut</option>
+    <option value="Livingston">Shaun Livingston</option>
+    <option value="Barbosa">Leandro Barbosa</option>
+    <option value="Barnes">Harrison Barnes</option>
+    <option value="Clark">Ian Clark</option>
+    <option value="Ezeli">Festus Ezeli</option>
+    <option value="Rush">Brandon Rush</option>
+    <option value="Varejao">Anderson Varejao</option>
+    <option value="Speight">Marreese Speights</option>
+    <option value="Looney">Kevon Looney</option>
+  </select>
+  <select id="offensiveStat" class="select_join" onchange="middleStat()">
+    <option value="fg">FG%</option>
+    <option value="per">PTS</option>
+  </select>
+</div>
+
+<br>
+
 <div id="graph">
-</div>
 </div>
 
 <script>
@@ -84,7 +142,7 @@
 		"Tristan Thompson":"#ff99ff",
 		"Matthew Dellavedova":"#cce6ff",
 		"Richard Jefferson":"#8cd9b3",
-		"Iman Shumpert":"#ffff00",
+		"Iman Shumpert":"#FEFC6B",
 		"Lebron James":"#003329",
 		"James Jones":"#1a1aff",
 		"Mo Williams":"#ff8000",
@@ -95,7 +153,6 @@
 		"Jordan McRae":"#d966ff",
 		"Sasha Kaun":"#00cc00",
 		"0": "#f2f2f2"
-
 	}
 
 
@@ -218,8 +275,6 @@
 				y01 = 0
 			}
 
-
-
 			//Plotting data
 
 			//parsing the data from the tsv file, and plots x as years and y as the total number of deaths.
@@ -234,13 +289,9 @@
 			var linePath = svg.append("path")
 				.datum(playerData)
 				.style("fill","none")
-				.style("stroke", "red")
+				.style("stroke", "#0253A4")
 				.style("stroke-width",3)
 				.attr("d", line);
-
-
-
-
 
 			var focus = svg.append("g")
 			.attr("class", "focus")
@@ -267,7 +318,7 @@
 		var y0 = playerData[yArrayIndex].toFixed(2);
 		console.log("def",defenderPerMin)
 		var defender = defenderPerMin[Math.floor(x0)]
-		var width = defender.length * 10;
+		var width = defender.length * 15;
 		console.log("width",width)
 		if(defender == 0 || defender == "0"){
 			defender = "Benched"
@@ -276,15 +327,13 @@
 		focus.attr("transform", "translate(" + xScale(x0) + "," + yScale(y0*100) + ")");
 		focus.select("text").text(y0 + "\n" + defender);
 		focus.insert("rect","text")
-    .attr("width", defender.length * 10)
+    .attr("width", defender.length * 15)
 		.attr("transform", "translate(0,-10)")
     .attr("height", 20)
-    .style("fill", "#e580ff");
+    .style("color", "white")
+    .style("fill", "#f2f2f2");
 	}
-
-
-		})
-
+	})
 }
 
 function handleStatChange() {
@@ -379,7 +428,7 @@ function handleStatChange() {
 		var linePath = svg.append("path")
 			.datum(playerData)
 			.style("fill","none")
-			.style("stroke", "red")
+			.style("stroke", "#f2f2f2")
 			.style("stroke-width",3)
 			.attr("d", line);
 
@@ -418,10 +467,11 @@ function mousemove() {
 	focus.attr("transform", "translate(" + xScale(x0) + "," + yScale(y0) + ")");
 	focus.select("text").text(y0 + "\n" + defender);
 	focus.insert("rect","text")
-	.attr("width", defender.length * 10)
+	.attr("width", defender.length * 15)
 	.attr("transform", "translate(0,-10)")
 	.attr("height", 20)
-	.style("fill", "#e580ff");
+	.style("color", "white")
+	.style("fill", "#0253A4");
 }
 
 
@@ -440,8 +490,5 @@ function middleStat() {
 }
 
 </script>
-
-
 </body>
-
 </html>
