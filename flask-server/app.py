@@ -18,6 +18,9 @@ CURR_FGA = 0
 def fgpct(last_name):
     global PLAYER
     PLAYER = last_name
+
+    initFgpctGlobals()
+
     return getFgpctData()
 
 def initFgpctGlobals():
