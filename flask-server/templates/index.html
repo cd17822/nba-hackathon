@@ -94,6 +94,7 @@
 		"Channing Frye":"#ff4d4d",
 		"Jordan McRae":"#d966ff",
 		"Sasha Kaun":"#00cc00",
+		"0": "#ffffff"
 
 	}
 
@@ -108,6 +109,11 @@
 	let resArr = getBuckets()[0]
 	let defenderPerMin = getBuckets()[1]
 	function getBuckets() {
+		e = document.getElementById("offensiveplayer").value;
+
+		d3.json('http://localhost:5000/defense/'+e, function(error,data){
+		})
+
 		let res =   ['JR Smith',
 		 'Kyrie Irving',
 		 'JR Smith',
@@ -156,7 +162,7 @@
 		 'Kyrie Irving',
 		 0,
 		 0]
-		console.log(res)
+
 		var resultArr = []
 		for (i=0;i<res.length;i++){
 			if (res[i] != res[i+1]){
@@ -170,17 +176,15 @@
 		return [resultArr,res]
 
 	}
-
+	populateGraph()
+	function populateGraph() {
+		e = document.getElementById("offensiveplayer").value;
 		d3.json('http://localhost:5000/fgpct/' + e.toString(), function(error,data){
 			//Set up logic here for parsing the data
 			var element = d3.select("#svg");
-			if (element != null){
-				console.log(element)
-				element.remove();
-			}
+			d3.selectAll("svg").remove();
 			playerData = data["fgpct"];
-			console.log(playerData);
-			console.log("ARR", resArr)
+
 
 
 			//Sets up the logic for displaying the graphs and plotting points on the graph
@@ -222,8 +226,8 @@
 			.attr("transform", "translate(" + padding + ",0)")
 			.call(yAxis)
 
-			var x01 = xScale(0)
-			var y01 = yScale(0)
+			var x01 = 0
+			var y01 = 0
 			//Add vertical line buckets
 			for (j=0;j<resArr.length;j++){
 				var min = resArr[j]["min"]
@@ -239,14 +243,15 @@
 				.style("opacity",1.0)
 				.style("fill", "none")
 
-				svg.append("rectangle")
-				.attr("x",x01)
-				.attr("y",y01)
+				svg.append("rect")
+				.attr("x",xScale(x01))
+				.attr("y",xScale(0))
 				.attr("width",xScale(min-x01))
-				.attr("height",yScale(50))
-				.style("fill","red")
+				.attr("height",yScale(10))
+				.style("fill",strokeColor)
+				.style("opacity",1.0)
 
-				x01 = xScale(min)
+				x01 = min
 				y01 = 0
 			}
 
@@ -270,7 +275,8 @@
 				.style("stroke-width",3)
 				.attr("d", line);
 
-			console.log(data);
+
+
 
 
 			var focus = svg.append("g")
@@ -298,48 +304,25 @@
 		var y0 = playerData[yArrayIndex].toFixed(2);
 		console.log("def",defenderPerMin)
 		var defender = defenderPerMin[Math.floor(x0)]
+		var width = defender.length * 10;
+		console.log("width",width)
 		if(defender == 0 || defender == "0"){
 			defender = "Benched"
 		}
-		console.log(y0, yScale(y0*100));
 
 		focus.attr("transform", "translate(" + xScale(x0) + "," + yScale(y0*100) + ")");
 		focus.select("text").text(y0 + "\n" + defender);
+		focus.insert("rect","text")
+    .attr("width", defender.length * 10)
+		.attr("transform", "translate(0,-10)")
+    .attr("height", 20)
+    .style("fill", "#e580ff");
 	}
 
 
 		})
 
-		function updateData() {
-
-    // Get the data again
-    d3.json('http://localhost:5000/fgpct/' + e.toString(), function(error, data) {
-        data.forEach(function(d) {
-                d.date = parseDate(d.date);
-                d.close = +d.close;
-            });
-
-        // Scale the range of the data again
-        x.domain(d3.extent(data, function(d) { return d.date; }));
-        y.domain([0, d3.max(data, function(d) { return d.close; })]);
-
-    // Select the section we want to apply our changes to
-    var svg = d3.select("body").transition();
-
-    // Make the changes
-    svg.select(".line")   // change the line
-        .duration(750)
-        .attr("d", valueline(data));
-    svg.select(".x.axis") // change the x axis
-        .duration(750)
-        .call(xAxis);
-    svg.select(".y.axis") // change the y axis
-        .duration(750)
-        .call(yAxis);
-
-    });
-		}
-
+}
 
 </script>
 
