@@ -5,7 +5,7 @@ from flask import render_template
 # from scipy import stats
 # import json
 
-app = Flask(__name__) 
+app = Flask(__name__)
 # data = pd.read_csv("data/game.csv")
 # global OFFENSE
 # OFFENSE = data[((data["BX"] <= 47) & (data["Period"].isin([1,2]))) | ((data["BX"] >= 47) & (data["Period"].isin([3,4])))]
@@ -95,7 +95,7 @@ def player_dist(row, playerID=PLAYER, teamID=1610612744):
 #     valid = clock.filter(lambda x: len(x) <= 30).groupby("Clock")
 #     per_sec = valid["Closest"].agg(stats.mode)
 #     closest = per_sec.to_frame()
-#     closest["Second"] = closest.index 
+#     closest["Second"] = closest.index
 #     closest["Minute"] = closest.apply(lambda x: math.ceil(x["Second"]/60), axis=1)
 #     closest["Name"] = closest.apply(lambda x: x["Closest"][0][0], axis=1)
 #     closest_by_min = closest.groupby("Minute")
@@ -146,6 +146,7 @@ def parseGameLineForPts(line):
         IN_GAME = False
         GAME_IS_OVER = True
     elif PLAYER in line and not "Assist: "+PLAYER in line and not "Block: "+PLAYER in line:
+        if PLAYER == 'Thompson' and not '[GSW' in line: return #the thompson glitch
         period = int(line.split()[4]) - 1
         seconds_elapsed_in_period = SECONDS_IN_PERIOD - int(line.split()[9]) / 10
 
@@ -207,6 +208,7 @@ def parseGameLineForFgpct(line):
         IN_GAME = False
         GAME_IS_OVER = True
     elif PLAYER in line and not "Assist: "+PLAYER in line and not "Block: "+PLAYER in line:
+        if PLAYER == 'Thompson' and not '[GSW' in line: return #the thompson glitch
         period = int(line.split()[4]) - 1
         seconds_elapsed_in_period = SECONDS_IN_PERIOD - int(line.split()[9]) / 10
 
