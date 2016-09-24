@@ -36,6 +36,10 @@ def pts(last_name):
 def home():
     return render_template('index.html')
 
+@app.route('/defense/<last_name>')
+def defense(last_name):
+    return "hi"
+
 def initPtsGlobals():
     global DATA_INDEX, GAME_IS_OVER, IN_GAME, DATA, LAST_DATAPOINT, PTS
     GAME_IS_OVER = False
@@ -160,4 +164,5 @@ def updateDataToIndex(index, data):
     DATA_INDEX = index
 
 if __name__ == '__main__':
+    print "yo"
     main()
