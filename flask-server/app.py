@@ -24,7 +24,7 @@ def fgpct(last_name):
     return getFgpctData()
 
 def initFgpctGlobals():
-    global DATA_INDEX, CURR_FGA, CURR_FGA, GAME_IS_OVER, IN_GAME, DATA, LAST_DATAPOINT
+    global DATA_INDEX, CURR_FGA, CURR_FGM, GAME_IS_OVER, IN_GAME, DATA, LAST_DATAPOINT
     GAME_IS_OVER = False
     IN_GAME = False
     DATA = []
