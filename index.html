@@ -1,0 +1,196 @@
+<html>
+<head>
+	<style>
+	.axis path,
+	.axis line {
+	    fill: none;
+	    stroke: black;
+	    shape-rendering: crispEdges;
+	}
+
+	.axis text {
+	    font-family: sans-serif;
+	    font-size: 8px;
+	}
+	svg {
+		border: 1px solid black;
+	}
+
+	h1,h2 {
+		color:blue;
+		margin-left: 20px;
+	}
+
+	.overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
+	</style>
+
+</head>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<body>
+
+<div>
+<p>
+	<h1>Games 5 NBA Finals</h1>
+	<h2>Evaluation of Cavalier's Defense on the Warriors </h2>
+	<text>Pick GSW player to visualize their performance over the game & the impact of the defense.</text>
+	<br></br>
+	<select id="offensiveplayer">
+	  <option value="lebron_james">Stephen Curry</option>
+	  <option value="klay_thompson">Klay Thompson</option>
+	  <option value="andre_iguodala">Andre Iguodala</option>
+	  <option value="draymond_green">Draymond Green</option>
+		<option value="andrew_bogut">Andrew Bogut</option>
+	  <option value="shaun_livingston">Shaun Livingston</option>
+	  <option value="leandro_barbose">Leandro Barbosa</option>
+	  <option value="harrison_barnes">Harrison Barnes</option>
+		<option value="ian_clark">Ian Clark</option>
+	  <option value="festus_ezeli">Festus Ezeli</option>
+	  <option value="brandon_rush">Brandon Rush</option>
+	  <option value="anderson_varejao">Anderson Varejao</option>
+		<option value="festus_ezeli">Festus Ezeli</option>
+	  <option value="brandon_rush">Brandon Rush</option>
+	  <option value="anderson_varejao">Anderson Varejao</option>
+		<option value="jason_thompson">Jason Thompson</option>
+		<option value="marreese_speights">Marreese Speights</option>
+		<option value="kevon_looney">Kevon Looney</option>
+		<option value="james_michael_mcadoo">James Michael McAdoo</option>
+	</select>
+</p>
+</div>
+
+<div>
+	<select>
+		<option value="fg">FG %</option>
+		<option value="per">PER</option>
+	</select>
+<div id="graph">
+</div>
+</div>
+
+<script>
+	// 48 value array from pranav.
+	// 60x48 1D array from charlie.
+	var height = 500;
+	var width = 800;
+	var padding = 40;
+
+
+	d3.json('http://localhost:5000/fgpct/Curry', function(error,data){
+		//Set up logic here for parsing the data
+		var e = document.getElementById("offensiveplayer").value;
+
+		console.log(error,data);
+
+
+		//Sets up the logic for displaying the graphs and plotting points on the graph
+		var svg = d3.select("#graph").append("svg")
+		.attr("height", height)
+		.attr("width", width);
+
+		var xScale = d3.scale.linear()
+		.domain([0, 48])
+		.range([padding, width-padding]);
+
+		var xAxis = d3.svg.axis()
+		.orient("bottom")
+		.tickFormat(d3.format("d"))
+		.ticks(48)
+		.scale(xScale)
+		.tickFormat(function (d){
+			return d;
+		});
+
+		svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(0," + (height-padding) + ")")
+		.call(xAxis);
+
+		var yScale = d3.scale.linear()
+		.domain([0,100])
+		.range([height-padding,padding]);
+
+		var yAxis = d3.svg.axis()
+		.orient("left")
+		.tickFormat(d3.format("d"))
+		.ticks(20)
+		.scale(yScale)
+
+
+		svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(" + padding + ",0)")
+		.call(yAxis)
+
+		//Plotting data
+
+		//parsing the data from the tsv file, and plots x as years and y as the total number of deaths.
+
+		var line = d3.svg.line()
+			.x(function(d,i) {
+				//should divide i by 60 to have the plot point
+				return xScale(i/60); })
+			.y(function(d,i) {
+				return yScale(d*100); });
+
+		var linePath = svg.append("path")
+			.datum(playerData)
+			.style("fill","none")
+			.style("stroke", "red")
+			.style("stroke-width",1)
+			.attr("d", line);
+
+		console.log(data);
+
+
+		var focus = svg.append("g")
+		.attr("class", "focus")
+		.style("display", "none");
+
+		focus.append("circle")
+				.attr("r", 4.5);
+
+		focus.append("text")
+				.attr("x", 9)
+				.attr("dy", ".35em");
+
+svg.append("rect")
+		.attr("class", "overlay")
+		.attr("width", width)
+		.attr("height", height)
+		.on("mouseover", function() { focus.style("display", null); })
+		.on("mouseout", function() { focus.style("display", "none"); })
+		.on("mousemove", mousemove);
+
+function mousemove() {
+	var x0 = xScale.invert(d3.mouse(this)[0]);
+	var yArrayIndex = Math.floor(x0*60);
+	var y0 = playerData[yArrayIndex].toFixed(2);
+	console.log(y0, yScale(y0*100));
+
+	focus.attr("transform", "translate(" + xScale(x0) + "," + yScale(y0*100) + ")");
+	focus.select("text").text(y0);
+}
+
+
+	})
+
+
+
+
+</script>
+
+
+</body>
+
+</html>
