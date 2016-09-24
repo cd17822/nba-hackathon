@@ -49,22 +49,18 @@
 	  <option value="Curry">Stephen Curry</option>
 	  <option value="Thompson">Klay Thompson</option>
 	  <option value="Iguodala">Andre Iguodala</option>
-	  <option value="draymond_green">Draymond Green</option>
-		<option value="andrew_bogut">Andrew Bogut</option>
-	  <option value="shaun_livingston">Shaun Livingston</option>
-	  <option value="leandro_barbose">Leandro Barbosa</option>
-	  <option value="harrison_barnes">Harrison Barnes</option>
-		<option value="ian_clark">Ian Clark</option>
-	  <option value="festus_ezeli">Festus Ezeli</option>
-	  <option value="brandon_rush">Brandon Rush</option>
-	  <option value="anderson_varejao">Anderson Varejao</option>
-		<option value="festus_ezeli">Festus Ezeli</option>
-	  <option value="brandon_rush">Brandon Rush</option>
-	  <option value="anderson_varejao">Anderson Varejao</option>
+	  <option value="Gree">Draymond Green</option>
+		<option value="Bogut">Andrew Bogut</option>
+	  <option value="Livingston">Shaun Livingston</option>
+	  <option value="Barbosa">Leandro Barbosa</option>
+	  <option value="Barnes">Harrison Barnes</option>
+		<option value="Clark">Ian Clark</option>
+	  <option value="Ezeli">Festus Ezeli</option>
+	  <option value="Rush">Brandon Rush</option>
+	  <option value="Varejao">Anderson Varejao</option>
 		<option value="jason_thompson">Jason Thompson</option>
-		<option value="marreese_speights">Marreese Speights</option>
-		<option value="kevon_looney">Kevon Looney</option>
-		<option value="james_michael_mcadoo">James Michael McAdoo</option>
+		<option value="Speight">Marreese Speights</option>
+		<option value="Loony">Kevon Looney</option>
 	</select>
 </p>
 </div>
@@ -81,12 +77,100 @@
 <script>
 	// 48 value array from pranav.
 	// 60x48 1D array from charlie.
+
+	var playerColor = {
+		"Kyrie Irving":"#ffffcc",
+		"JR Smith":"#ffbf80",
+		"Tristan Thompson":"#ff99ff",
+		"Matthew Dellavedova":"#cce6ff",
+		"Richard Jefferson":"#8cd9b3",
+		"Iman Shumpert":"#ffff00",
+		"Lebron James":"#003329",
+		"James Jones":"#1a1aff",
+		"Mo Williams":"#ff8000",
+		"Kevin Love":" #ffe6ff",
+		"Dahntay Jones":"#ff80bf",
+		"Timofey Mozgov":"#99004d",
+		"Channing Frye":"#ff4d4d",
+		"Jordan McRae":"#d966ff",
+		"Sasha Kaun":"#00cc00",
+
+	}
+
+
 	var height = 500;
 	var width = 800;
 	var padding = 40;
 
+
 	var e = document.getElementById("offensiveplayer").value;
 	console.log('http://localhost:5000/fgpct/' + e)
+	let resArr = getBuckets()[0]
+	let defenderPerMin = getBuckets()[1]
+	function getBuckets() {
+		let res =   ['JR Smith',
+		 'Kyrie Irving',
+		 'JR Smith',
+		 'Kyrie Irving',
+		 'JR Smith',
+		 'JR Smith',
+		 'Tristan Thompson',
+		 'Kyrie Irving',
+		 'Kyrie Irving',
+		 'Matthew Dellavedova',
+		 'Richard Jefferson',
+		 0,
+		 0,
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'LeBron James',
+		 'JR Smith',
+		 'Kyrie Irving',
+		 'Kyrie Irving',
+		 'LeBron James',
+		 'Kyrie Irving',
+		 'Kyrie Irving',
+		 'Kyrie Irving',
+		 0,
+		 0,
+		 0,
+		 0,
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Iman Shumpert',
+		 'Tristan Thompson',
+		 'JR Smith',
+		 'JR Smith',
+		 'Kyrie Irving',
+		 0,
+		 0]
+		console.log(res)
+		var resultArr = []
+		for (i=0;i<res.length;i++){
+			if (res[i] != res[i+1]){
+				resultArr.push({
+					name:String(res[i]),
+					min:i+1
+				})
+			}
+		}
+
+		return [resultArr,res]
+
+	}
+
 		d3.json('http://localhost:5000/fgpct/' + e.toString(), function(error,data){
 			//Set up logic here for parsing the data
 			var element = d3.select("#svg");
@@ -96,6 +180,7 @@
 			}
 			playerData = data["fgpct"];
 			console.log(playerData);
+			console.log("ARR", resArr)
 
 
 			//Sets up the logic for displaying the graphs and plotting points on the graph
@@ -137,6 +222,36 @@
 			.attr("transform", "translate(" + padding + ",0)")
 			.call(yAxis)
 
+			var x01 = xScale(0)
+			var y01 = yScale(0)
+			//Add vertical line buckets
+			for (j=0;j<resArr.length;j++){
+				var min = resArr[j]["min"]
+				var name = resArr[j]["name"]
+				var strokeColor = playerColor[name]
+				svg.append("line")
+				.attr("x1",xScale(min))
+				.attr("x2",xScale(min)+1)
+				.attr("y1",yScale(0))
+				.attr("y2",yScale(100))
+				.style("stroke-width", 1)
+				.style("stroke", strokeColor)
+				.style("opacity",1.0)
+				.style("fill", "none")
+
+				svg.append("rectangle")
+				.attr("x",x01)
+				.attr("y",y01)
+				.attr("width",xScale(min-x01))
+				.attr("height",yScale(50))
+				.style("fill","red")
+
+				x01 = xScale(min)
+				y01 = 0
+			}
+
+
+
 			//Plotting data
 
 			//parsing the data from the tsv file, and plots x as years and y as the total number of deaths.
@@ -152,7 +267,7 @@
 				.datum(playerData)
 				.style("fill","none")
 				.style("stroke", "red")
-				.style("stroke-width",1)
+				.style("stroke-width",3)
 				.attr("d", line);
 
 			console.log(data);
@@ -181,10 +296,15 @@
 		var x0 = xScale.invert(d3.mouse(this)[0]);
 		var yArrayIndex = Math.floor(x0*60);
 		var y0 = playerData[yArrayIndex].toFixed(2);
+		console.log("def",defenderPerMin)
+		var defender = defenderPerMin[Math.floor(x0)]
+		if(defender == 0 || defender == "0"){
+			defender = "Benched"
+		}
 		console.log(y0, yScale(y0*100));
 
 		focus.attr("transform", "translate(" + xScale(x0) + "," + yScale(y0*100) + ")");
-		focus.select("text").text(y0);
+		focus.select("text").text(y0 + "\n" + defender);
 	}
 
 
